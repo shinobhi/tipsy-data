@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <style>
+    .tick line{
+      display: none;
+    }
+  </style>
+  <script src="http://d3js.org/d3.v3.min.js"></script>
+  <script src="http://dimplejs.org/dist/dimple.v2.1.0.min.js"></script>
+    <script type="text/javascript">
+      function drawIBU(data) {
+        rec = data.records;
+
+          "use strict";
+          var margin = 0,
+              width = 1400 - margin,
+              height = 800 - margin;
+
+          d3.select("body").append("h2").text("Minimum and Maximum IBUs of Each Style of Beer");
+
+          var svg = d3.select("body")
+            .append("svg")
+              .attr("width", width + margin)
+              .attr("height", height + margin)
+            .append('g')
+                .attr('class','chart');
+
+          var myChart = new dimple.chart(svg, rec);
+          var x = myChart.addCategoryAxis("x", "name");
+          var y1 = myChart.addMeasureAxis("y", "ibu_max");
+          y1.title = "IBUs";
+          var y2 = myChart.addMeasureAxis("y", "ibu_min");
+          y2.overrideMax = 100;
+          y2.hidden = true;
+          y2.colors = ["FFFFFF"];
+          myChart.addSeries("maximum", dimple.plot.bar, [x, y1]);
+          myChart.addSeries("minimum", dimple.plot.bar, [x, y2]);
+          var transparent = new dimple.color("white", "white");
+          transparent.opacity = 1;
+          myChart.defaultColors = [
+            new dimple.color("#6699ff", "white"),
+            transparent
+          ]; 
+          myChart.draw();
+        };
+
+        function drawSRM (data){
+          rec = data.records;
+
+          var margin = 0,
+          width = 1400 - margin,
+          height = 800 - margin;
+
+          d3.select("body").append("h2").text("SRM Values of Each Style of Beer");
+
+          var svg = d3.select("body")
+            .append("svg")
+              .attr("width", width + margin)
+              .attr("height", height + margin)
+            .append('g')
+                .attr('class','chart');
+
+          var myChart = new dimple.chart(svg, rec);
+
+          var x = myChart.addCategoryAxis("x", "name");
+          var y = myChart.addMeasureAxis("y", "srm");
+          myChart.addSeries(null, dimple.plot.bar);
+
+          myChart.draw();
+        };
+
+        function drawBrewery (data){
+          rec = data.records;
+
+          var newdata = [];
+          rec.map(function(item){
+            newdata.push({
+              "num": 1,
+              "id": item.id,
+              "name": item.name,
+              "country": item.country,
+              "state": item.state
+            });
+          });
+
+          d3.select("body").append("h2").text("Breweries per Country");
+
+          var margin = 0,
+          width = 1400 - margin,
+          height = 800 - margin;
+
+          //code for Breweries by Country go Here
+          var svg1 = d3.select("body")
+            .append("svg")
+              .attr("width", width + margin)
+              .attr("height", height + margin)
+            .append('g')
+                .attr('class','chart');
+
+          var chart1 = new dimple.chart(svg1, newdata);
+
+          var p = chart1.addMeasureAxis("p", "num");
+          chart1.addSeries("country", dimple.plot.pie);
+
+          chart1.addLegend(300, 20, 90, 300, "left");
+          chart1.draw();
+
+          d3.select("body").append("h2").text("Breweries per Region");
+
+          //code for Breweries by Region go Here
+          var svg2 = d3.select("body")
+            .append("svg")
+              .attr("width", width + margin)
+              .attr("height", height + margin)
+            .append('g')
+                .attr('class','chart');
+
+          var chart2 = new dimple.chart(svg2, newdata);
+
+          var p = chart2.addMeasureAxis("p", "num");
+          chart2.addSeries("state", dimple.plot.pie);
+
+          chart2.addLegend(270, 20, 90, 650, "left");
+          chart2.draw();
+        }
+      </script>
+  </head>
+<body>
+  <script type="text/javascript">
+  d3.json('https://backend-staging-183303.appspot.com/styles?limit=65', drawIBU);
+  d3.json('https://backend-staging-183303.appspot.com/styles?limit=65', drawSRM);
+  d3.json('https://backend-staging-183303.appspot.com/breweries?limit=194', drawBrewery);
+  </script>
+</body>
+</html>
