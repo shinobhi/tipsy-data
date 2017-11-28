@@ -9,6 +9,7 @@
   </style>
   <script src="//d3js.org/d3.v3.min.js"></script>
   <script src="//dimplejs.org/dist/dimple.v2.1.0.min.js"></script>
+  <link rel = "stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
     <script type="text/javascript">
       function drawIBU(data) {
         rec = data.records;
@@ -44,6 +45,8 @@
             transparent
           ]; 
           myChart.draw();
+
+          d3.select("body").append("p").attr("style", "margin-left: 40px").text("Here in this bar graph we see the differences between the minimum and maximum IBU (International Bittering Unit) of each style of beer on brewtiful.world. We can see the wild contrast for many beers between the maximum and minimum value, which was quite surprising for me as a non-beer enthusiast.");
         };
 
         function drawSRM (data){
@@ -69,6 +72,8 @@
           myChart.addSeries(null, dimple.plot.bar);
 
           myChart.draw();
+
+          d3.select("body").append("p").attr("style", "margin-left: 40px").text("Here in this bar graph we see the SRM (Standard Reference Method) of each style of beer on brewtiful.world. This value expresses how dark or light the beer is.");
         };
 
         function drawBrewery (data){
@@ -107,6 +112,8 @@
           chart1.addLegend(300, 20, 90, 300, "left");
           chart1.draw();
 
+          d3.select("body").append("p").attr("style", "margin-left: 40px").text("In this pie chart, we see that the bulk of the data on breweries is for those located in the United States. It would definitely be good if there was more data on breweries in other countries, in order to cater to a larger audience.");
+
           d3.select("body").append("h2").text("Breweries per Region");
 
           //code for Breweries by Region go Here
@@ -124,6 +131,8 @@
 
           chart2.addLegend(270, 20, 90, 650, "left");
           chart2.draw();
+
+          d3.select("body").append("p").attr("style", "margin-left: 40px").text("As a point of comparison, here is a pie chart showing the breakdown of breweries by region.");
         }
       </script>
   </head>
@@ -133,5 +142,12 @@
   d3.json('https://backend-staging-183303.appspot.com/styles?limit=65', drawSRM);
   d3.json('https://backend-staging-183303.appspot.com/breweries?limit=194', drawBrewery);
   </script>
+  <p>
+    These visualizations were created using:
+  </p>
+  <ul>
+    <li>D3</li>
+    <li>Dimple JS</li>
+  </ul>
 </body>
 </html>
